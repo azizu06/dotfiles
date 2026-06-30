@@ -1,0 +1,160 @@
+{
+  "$schema": "https://raw.githubusercontent.com/manaflow-ai/cmux/main/web/data/cmux.schema.json",
+  "schemaVersion": 1,
+
+  // JSONC (comments allowed). Any key left out falls back to the value saved in Settings.
+  // Reload after edits:  cmux reload-config      Validate:  cmux config validate
+  // Terminal LOOK (theme/font/opacity) lives in ~/.config/ghostty/config, not here.
+
+  "app": {
+    // Lock the UI to dark so it always matches the Catppuccin Mocha terminal (no flip in macOS light mode).
+    "appearance": "dark",
+    // Bubble any workspace whose agent needs you to the top of the sidebar — key for many workspaces.
+    "reorderOnNotification": true,
+    "newWorkspacePlacement": "afterCurrent",
+    "workspaceInheritWorkingDirectory": true,
+    "openMarkdownInCmuxViewer": true,   // keep rendered .md in cmux's nice viewer
+    // Code/text clicks leave cmux's plain-text editor and open in VS Code for real
+    // syntax highlighting + Source Control. Markdown still renders in cmux (line above).
+    "openSupportedFilesInCmux": false,
+    // cmux opens this via macOS `open -a <value>`, so it must be the APP NAME (or
+    // bundle id com.microsoft.VSCode), NOT a CLI path. A CLI path like
+    // /opt/homebrew/bin/code fails `open -a` and macOS falls back to the default
+    // code-file handler (Cursor). The app name forces real VS Code.
+    "preferredEditor": "Visual Studio Code",
+    "commandPaletteSearchesAllSurfaces": true,   // Cmd+P finds surfaces across ALL workspaces
+    // Don't lose live agent sessions to an accidental Cmd+Q.
+    "confirmQuit": "always",
+    "warnBeforeClosingTab": true
+  },
+
+  "terminal": {
+    // Reattach to agent sessions after reload/restart instead of dropping them.
+    "autoResumeAgentSessions": true,
+    "showScrollBar": true,
+    "copyOnSelect": true,   // matches Ghostty copy-on-select; select text = copied
+
+    // *** Memory-pressure guard for heavy agent-team sessions ***
+    // Caps how many agent terminals stay LIVE at once; idle ones hibernate and
+    // wake on focus. Lets you fan out many workspaces without the all-at-once
+    // RAM spike that crashed the machine before.
+    "agentHibernation": {
+      "enabled": true,
+      "maxLiveTerminals": 8,
+      "idleSeconds": 30
+    }
+  },
+
+  "notifications": {
+    "hooksMode": "append",
+    // Native sound off; the always-audible hook below is the single sound source so it
+    // chimes even when cmux is the focused app (why the earlier test was silent).
+    "sound": "none",
+    "paneFlash": true,        // flash the pane border when an agent in it needs attention
+    "unreadPaneRing": true,   // ring indicator on unread panes
+    "dockBadge": true,
+    "showInMenuBar": true,
+
+    // Notification hooks: each gets the alert as JSON on stdin, returns it (possibly modified)
+    // on stdout, and can mute/keep desktop banner, sound, reorder, pane flash per-notification.
+    // This one passes the JSON through untouched and plays Submarine for every top-level agent
+    // alert (subagents are already suppressed via automation.suppressSubagentNotifications).
+    // To change the sound, swap the .aiff (options: Glass, Hero, Ping, Funk, Bottle, Submarine...).
+    // To go quiet, set "sound" above back to "none" and delete this hook.
+    "hooks": [
+      {
+        "id": "always-audible",
+        "command": "cat; (afplay /System/Library/Sounds/Submarine.aiff >/dev/null 2>&1 &)",
+        "timeoutSeconds": 10
+      }
+    ]
+  },
+
+  "automation": {
+    // Keep subagent chatter out of your face during agent-team runs — only top-level agents notify.
+    "suppressSubagentNotifications": true,
+    "ripgrepBinaryPath": "/opt/homebrew/bin/rg",   // use installed ripgrep for fast in-app search
+    "claudeCodeIntegration": true,
+    "geminiIntegration": true,
+    "cursorIntegration": true,
+    "kiroIntegration": true,
+    "ampIntegration": true,
+    "socketControlMode": "cmuxOnly"
+  },
+
+  "sidebar": {
+    "wrapWorkspaceTitles": true, // show full workspace names instead of truncating ("Evaluate cmux as pri…")
+    "showProgress": true,       // live progress bars from agents
+    "watchGitStatus": true,     // dirty/ahead-behind per workspace
+    "showPorts": true,          // detected dev-server ports, clickable
+    "showPullRequests": true,
+    "makePullRequestsClickable": true,
+    "openPullRequestLinksInCmuxBrowser": true,
+    "showLog": true,
+    "showSSH": true,
+    "branchLayout": "vertical",
+    "showWorkspaceDescription": true
+  },
+
+  // Sidebar tinted to match the Catppuccin Mocha terminal — cohesive dark look with a faint mauve wash.
+  "sidebarAppearance": {
+    "matchTerminalBackground": true,
+    "darkModeTintColor": "#cba6f7",
+    "tintOpacity": 0.05
+  },
+
+  "workspaceColors": {
+    // Color wash + rail per workspace — fast visual triage across many tabs.
+    "indicatorStyle": "washRail"
+  },
+
+  // Side-by-side diffs — better for big PR / code review on a wide screen.
+  "diffViewer": {
+    "defaultLayout": "split"
+  },
+
+  "markdown": {
+    "fontSize": 16,
+    "maxWidth": 900
+  },
+
+  "fileEditor": {
+    "wordWrap": true
+  },
+
+  "browser": {
+    "defaultSearchEngine": "google",
+    "showSearchSuggestions": true,
+    "openTerminalLinksInCmuxBrowser": true,
+    "theme": "dark",                          // match the dark cmux/terminal look
+    // Free a hidden browser tab's memory after 2 min instead of 5 — eases RAM pressure on 16 GB.
+    "hiddenWebViewDiscardDelaySeconds": 120
+  },
+
+  // Only override the keys you want to change; everything else keeps cmux defaults.
+  "shortcuts": {
+    "bindings": {
+      // Global search on the easy, VS-Code-familiar chord.
+      "globalSearch": "cmd+shift+f",
+      // The narrower "find in current directory" moves to the long chord (rarely used solo).
+      "findInDirectory": "cmd+shift+ctrl+f",
+
+      // Move focus between panes (your agent boxes). Cmd+Shift+arrows: verified free of
+      // Rectangle (uses only Cmd+Opt + Opt+Ctrl, no arrows) and macOS Spaces (uses Ctrl+arrows).
+      "focusUp": "cmd+shift+↑",
+      "focusDown": "cmd+shift+↓",
+      "focusLeft": "cmd+shift+←",
+      "focusRight": "cmd+shift+→",
+
+      // Right sidebar TOGGLE (show AND hide). Default was cmd+opt+b which Rectangle eats.
+      // cmd+b = left sidebar, cmd+shift+b = right sidebar. (cmd+shift+e only toggles FOCUS.)
+      "toggleFileExplorer": "cmd+shift+b",
+
+      // Diff viewer (git changes) — used constantly, so on an easy 2-key chord.
+      // Default was the 4-key ctrl+cmd+shift+d (the whole D family is taken by splits).
+      // cmd+j verified free: not a cmux default, not in Ghostty (cmd+k is clear), not Rectangle/Spaces.
+      // In-viewer keys stay vim-style: j/k scroll, gg/shift+g top/bottom, / file search.
+      "openDiffViewer": "cmd+j"
+    }
+  }
+}

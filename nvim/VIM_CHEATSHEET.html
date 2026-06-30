@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vim Motions & Neovim Cheatsheet</title>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.4.20/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <style>
+        body { font-family: 'JetBrains Mono', monospace; }
+        .catppuccin-bg { background-color: #1e1e2e; color: #cdd6f4; }
+        .catppuccin-card { background-color: #313244; border: 1px solid #45475a; }
+        .catppuccin-accent { background-color: #89b4fa; color: #1e1e2e; }
+        .catppuccin-error { background-color: #f38ba8; }
+        .catppuccin-success { background-color: #a6e3a1; }
+        .motion-box {
+            background-color: #313244;
+            border-left: 4px solid #89b4fa;
+            padding: 1rem;
+            margin: 0.5rem 0;
+            border-radius: 0.25rem;
+        }
+        .key {
+            display: inline-block;
+            background-color: #45475a;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-weight: bold;
+            color: #89b4fa;
+            margin: 0 0.25rem;
+            font-size: 0.85rem;
+        }
+        .guide { color: #94e2d5; }
+        .example { color: #f5c2de; }
+        h2 { color: #89b4fa; border-bottom: 2px solid #45475a; padding-bottom: 0.5rem; }
+        h3 { color: #a6e3a1; margin-top: 1rem; }
+        .tabs-container { display: none; }
+        .tabs-container.active { display: block; }
+        .tab-btn {
+            background: none;
+            border: none;
+            color: #cdd6f4;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+        }
+        .tab-btn.active {
+            color: #89b4fa;
+            border-bottom-color: #89b4fa;
+        }
+        .resource-link {
+            display: block;
+            margin: 0.5rem 0;
+            padding: 0.75rem;
+            background-color: #313244;
+            border-radius: 0.25rem;
+            color: #89b4fa;
+            text-decoration: none;
+            border-left: 3px solid #a6e3a1;
+        }
+        .resource-link:hover { background-color: #45475a; }
+        .quick-ref { columns: 2; gap: 2rem; }
+        @media (max-width: 768px) { .quick-ref { columns: 1; } }
+    </style>
+</head>
+<body class="catppuccin-bg p-6">
+    <div class="max-w-6xl mx-auto">
+        <!-- Header -->
+        <div class="mb-8">
+            <h1 class="text-4xl font-bold text-center catppuccin-accent mb-2 px-4 py-2 rounded">
+                Vim Motions & Neovim Cheatsheet
+            </h1>
+            <p class="text-center text-gray-400 mb-4">Terminal-based power editing for cmux + Neovim + LazyVim</p>
+            <div class="flex justify-center gap-2 flex-wrap mb-4">
+                <button onclick="showTab('beginner')" class="tab-btn active" id="btn-beginner">🌱 Beginner (Day 1)</button>
+                <button onclick="showTab('intermediate')" class="tab-btn" id="btn-intermediate">⚡ Intermediate (Week 1)</button>
+                <button onclick="showTab('advanced')" class="tab-btn" id="btn-advanced">🔥 Advanced (Month 1+)</button>
+                <button onclick="showTab('neovim')" class="tab-btn" id="btn-neovim">📝 Neovim-Specific</button>
+                <button onclick="showTab('resources')" class="tab-btn" id="btn-resources">🎮 Practice & Learn</button>
+            </div>
+        </div>
+
+        <!-- BEGINNER TAB -->
+        <div id="beginner" class="tabs-container active">
+            <h2>🌱 Beginner: Core Motions (Day 1–3)</h2>
+            <p class="mb-4">Learn these first. Everything else builds on them.</p>
+
+            <h3>Modes</h3>
+            <div class="motion-box">
+                <div><span class="key">i</span> <span class="guide">→ Insert mode (edit before cursor)</span></div>
+                <div><span class="key">a</span> <span class="guide">→ Insert mode (edit after cursor)</span></div>
+                <div><span class="key">Esc</span> or <span class="key">jj</span> or <span class="key">jk</span> <span class="guide">→ Back to normal mode</span></div>
+                <div><span class="key">v</span> <span class="guide">→ Visual mode (select text)</span></div>
+                <div><span class="key">Shift-V</span> <span class="guide">→ Visual line mode</span></div>
+            </div>
+
+            <h3>Navigation (hjkl are your arrows)</h3>
+            <div class="motion-box">
+                <div><span class="key">h</span> ← <span class="key">j</span> ↓ <span class="key">k</span> ↑ <span class="key">l</span> → <span class="guide">Left, down, up, right</span></div>
+                <div><span class="key">w</span> <span class="guide">→ Jump to next word start</span></div>
+                <div><span class="key">b</span> <span class="guide">→ Jump to previous word start</span></div>
+                <div><span class="key">e</span> <span class="guide">→ Jump to word end</span></div>
+                <div><span class="key">0</span> <span class="guide">→ Beginning of line</span></div>
+                <div><span class="key">$</span> <span class="guide">→ End of line</span></div>
+                <div><span class="key">gg</span> <span class="guide">→ Top of file</span></div>
+                <div><span class="key">Shift-G</span> <span class="guide">→ Bottom of file</span></div>
+            </div>
+
+            <h3>Edit (delete, yank, paste)</h3>
+            <div class="motion-box">
+                <div><span class="key">d</span> + motion <span class="guide">→ Delete (e.g., <span class="key">dw</span> = delete word)</span></div>
+                <div><span class="key">dd</span> <span class="guide">→ Delete entire line</span></div>
+                <div><span class="key">y</span> + motion <span class="guide">→ Yank/copy (e.g., <span class="key">yw</span> = copy word)</span></div>
+                <div><span class="key">yy</span> <span class="guide">→ Yank entire line</span></div>
+                <div><span class="key">p</span> <span class="guide">→ Paste after cursor</span></div>
+                <div><span class="key">Shift-P</span> <span class="guide">→ Paste before cursor</span></div>
+                <div><span class="key">u</span> <span class="guide">→ Undo</span></div>
+                <div><span class="key">Ctrl-r</span> <span class="guide">→ Redo</span></div>
+            </div>
+
+            <h3>Example: Your First Edit</h3>
+            <div class="catppuccin-card p-4 rounded mb-4">
+                <p class="example">Let's say you want to change a word:</p>
+                <ol class="list-decimal list-inside space-y-1 mt-2">
+                    <li>Move to the word: <span class="key">w</span> or <span class="key">b</span></li>
+                    <li>Delete it: <span class="key">dw</span></li>
+                    <li>Type the new word in insert mode: <span class="key">i</span></li>
+                    <li>Exit: <span class="key">Esc</span></li>
+                </ol>
+                <p class="text-sm mt-2 text-gray-400">Or shorter: <span class="key">cw</span> (change word) — combine delete + insert in one motion.</p>
+            </div>
+        </div>
+
+        <!-- INTERMEDIATE TAB -->
+        <div id="intermediate" class="tabs-container">
+            <h2>⚡ Intermediate: Efficiency Hacks (Week 1)</h2>
+
+            <h3>Find & Replace Within Line</h3>
+            <div class="motion-box">
+                <div><span class="key">f</span> + char <span class="guide">→ Find char forward (e.g., <span class="key">fa</span> jumps to first 'a')</span></div>
+                <div><span class="key">Shift-F</span> + char <span class="guide">→ Find char backward</span></div>
+                <div><span class="key">;</span> <span class="guide">→ Repeat last find forward</span></div>
+                <div><span class="key">,</span> <span class="guide">→ Repeat last find backward</span></div>
+                <div><span class="example">Example: <span class="key">f(</span> jumps to next <span class="key">(</span>, then <span class="key">;</span> for the next one</span></div>
+            </div>
+
+            <h3>Text Objects (The Secret Sauce)</h3>
+            <div class="motion-box">
+                <div><span class="key">ci</span> + char <span class="guide">→ Change inside (e.g., <span class="key">ci(</span> = change inside parentheses)</span></div>
+                <div><span class="key">di</span> + char <span class="guide">→ Delete inside</span></div>
+                <div><span class="key">ca</span> + char <span class="guide">→ Change around (including the delimiters)</span></div>
+                <div><span class="key">da</span> + char <span class="guide">→ Delete around</span></div>
+                <div><span class="example">Huge example: <span class="key">ciw</span> (change in word), <span class="key">cip</span> (change in paragraph), <span class="key">ci"</span> (change in quotes)</span></div>
+            </div>
+
+            <h3>Line Jumps</h3>
+            <div class="motion-box">
+                <div><span class="key">Shift-H</span> <span class="guide">→ Jump to top of visible screen</span></div>
+                <div><span class="key">Shift-M</span> <span class="guide">→ Jump to middle of visible screen</span></div>
+                <div><span class="key">Shift-L</span> <span class="guide">→ Jump to bottom of visible screen</span></div>
+                <div><span class="key">zz</span> <span class="guide">→ Center current line on screen</span></div>
+            </div>
+
+            <h3>Counts (Repeat Motions)</h3>
+            <div class="motion-box">
+                <div><span class="key">3w</span> <span class="guide">→ Jump 3 words forward</span></div>
+                <div><span class="key">5j</span> <span class="guide">→ Move down 5 lines</span></div>
+                <div><span class="key">4fa</span> <span class="guide">→ Find the 4th 'a'</span></div>
+                <div><span class="example">With <span class="key">relativenumber</span> on, you see line distances, making counts natural: "that line is 6 down, so <span class="key">6dj</span>"</span></div>
+            </div>
+
+            <h3>Search (Global Motions)</h3>
+            <div class="motion-box">
+                <div><span class="key">/</span> + text <span class="guide">→ Search forward</span></div>
+                <div><span class="key">?</span> + text <span class="guide">→ Search backward</span></div>
+                <div><span class="key">n</span> <span class="guide">→ Next match</span></div>
+                <div><span class="key">Shift-N</span> <span class="guide">→ Previous match</span></div>
+            </div>
+        </div>
+
+        <!-- ADVANCED TAB -->
+        <div id="advanced" class="tabs-container">
+            <h2>🔥 Advanced: Power Chains (Month 1+)</h2>
+            <p class="mb-4">Combine motions, operators, and text objects into one-key editing cascades.</p>
+
+            <h3>Operators (Composable Prefixes)</h3>
+            <div class="motion-box">
+                <div><span class="key">c</span> <span class="guide">→ Change (delete + insert)</span></div>
+                <div><span class="key">d</span> <span class="guide">→ Delete</span></div>
+                <div><span class="key">y</span> <span class="guide">→ Yank (copy)</span></div>
+                <div><span class="key">></span> <span class="guide">→ Indent</span></div>
+                <div><span class="key"><</span> <span class="guide">→ Dedent</span></div>
+                <div><span class="key">=</span> <span class="guide">→ Auto-format (reindent)</span></div>
+            </div>
+
+            <h3>Compound Examples</h3>
+            <div class="motion-box">
+                <div><span class="key">6dj</span> <span class="guide">→ Delete next 6 lines</span></div>
+                <div><span class="key">c3w</span> <span class="guide">→ Change next 3 words</span></div>
+                <div><span class="key">y2e</span> <span class="guide">→ Copy to the end of next 2 words</span></div>
+                <div><span class="key">dip</span> <span class="guide">→ Delete paragraph</span></div>
+                <div><span class="key">>%</span> <span class="guide">→ Indent matching bracket pair</span></div>
+                <div><span class="key">==</span> <span class="guide">→ Auto-format current line</span></div>
+            </div>
+
+            <h3>Special Motions</h3>
+            <div class="motion-box">
+                <div><span class="key">%</span> <span class="guide">→ Jump to matching bracket/paren/brace</span></div>
+                <div><span class="key">.</span> <span class="guide">→ Repeat last action (incredible for repetitive edits)</span></div>
+                <div><span class="key">Ctrl-v</span> <span class="guide">→ Visual block mode (select columns)</span></div>
+            </div>
+
+            <h3>The Dot Operator (Repeat)</h3>
+            <div class="catppuccin-card p-4 rounded">
+                <p class="example">Do an edit once, then <span class="key">.</span> repeats it at your next cursor position.</p>
+                <p class="text-sm mt-2 text-gray-400">Example: Change one variable name with <span class="key">cw</span>, move to the next with <span class="key">w</span>, then hit <span class="key">.</span> to repeat the change. Chain: <span class="key">cw</span> → type → <span class="key">Esc</span> → <span class="key">w</span> → <span class="key">.</span> → <span class="key">w</span> → <span class="key">.</span></p>
+            </div>
+        </div>
+
+        <!-- NEOVIM-SPECIFIC TAB -->
+        <div id="neovim" class="tabs-container">
+            <h2>📝 Neovim + LazyVim Specifics</h2>
+
+            <h3>Leader Key (<span class="key">Space</span>)</h3>
+            <p class="mb-4">Hit space and wait — which-key pops up showing all available commands.</p>
+            <div class="motion-box">
+                <div><span class="key">Space space</span> <span class="guide">→ Fuzzy find files</span></div>
+                <div><span class="key">Space /</span> <span class="guide">→ Grep (search text in all files)</span></div>
+                <div><span class="key">Space e</span> <span class="guide">→ Toggle file explorer</span></div>
+                <div><span class="key">Space o</span> <span class="guide">→ Open Obsidian vault (search notes, create links)</span></div>
+                <div><span class="key">Space s v</span> <span class="guide">→ Vertical split</span></div>
+                <div><span class="key">Space s h</span> <span class="guide">→ Horizontal split</span></div>
+                <div><span class="key">Space b d</span> <span class="guide">→ Close current file (delete buffer)</span></div>
+                <div><span class="key">Space q l</span> <span class="guide">→ Open quickfix list (errors/warnings)</span></div>
+                <div><span class="key">Ctrl-s</span> <span class="guide">→ Save (auto-formats on save)</span></div>
+            </div>
+
+            <h3>Window Navigation</h3>
+            <div class="motion-box">
+                <div><span class="key">Ctrl-h</span> ← <span class="key">Ctrl-j</span> ↓ <span class="key">Ctrl-k</span> ↑ <span class="key">Ctrl-l</span> → <span class="guide">Move between splits</span></div>
+                <div><span class="key">Shift-H</span> / <span class="key">Shift-L</span> <span class="guide">→ Prev/next buffer (open file)</span></div>
+            </div>
+
+            <h3>LSP (Language-Aware Features)</h3>
+            <div class="motion-box">
+                <div><span class="key">gd</span> <span class="guide">→ Go to definition</span></div>
+                <div><span class="key">gr</span> <span class="guide">→ Find all references</span></div>
+                <div><span class="key">K</span> <span class="guide">→ Hover (show docs/type info)</span></div>
+                <div><span class="key">Space cr</span> <span class="guide">→ Rename (variable/function across file)</span></div>
+                <div><span class="key">[d</span> / <span class="key">]d</span> <span class="guide">→ Previous/next diagnostic (error)</span></div>
+            </div>
+
+            <h3>Autocomplete</h3>
+            <div class="motion-box">
+                <div><span class="guide">Start typing, blink.cmp shows suggestions automatically</span></div>
+                <div><span class="key">Ctrl-n</span> / <span class="key">Ctrl-p</span> <span class="guide">→ Next/prev suggestion</span></div>
+                <div><span class="key">Ctrl-y</span> <span class="guide">→ Accept suggestion</span></div>
+                <div><span class="key">Ctrl-e</span> <span class="guide">→ Dismiss menu</span></div>
+                <div><span class="example">Completions are per-language (JS knows imports, Python knows dependencies, etc.). All from your installed LSP servers.</span></div>
+            </div>
+
+            <h3>Obsidian Integration</h3>
+            <div class="motion-box">
+                <div><span class="key">Space o</span> <span class="guide">→ Open Obsidian picker</span></div>
+                <div><span class="guide">Type to fuzzy-search your vault</span></div>
+                <div><span class="key">Ctrl-v</span> (in picker) <span class="guide">→ Create new note</span></div>
+                <div><span class="guide">In-file: wiki-links like <span class="key">[[Note Name]]</span> auto-complete with <span class="key">Ctrl-n</span></span></div>
+                <div><span class="example">You can edit your Obsidian notes inline in Neovim without switching apps.</span></div>
+            </div>
+        </div>
+
+        <!-- PRACTICE & RESOURCES TAB -->
+        <div id="resources" class="tabs-container">
+            <h2>🎮 Practice & Learning Resources</h2>
+            <p class="mb-4">Free, gamified ways to practice Vim motions until they're muscle memory.</p>
+
+            <h3>Interactive Games</h3>
+            <a href="https://vim-adventures.com/" target="_blank" class="resource-link">
+                🎮 VimAdventures — Browser-based game. Learn hjkl with level progression. 30 min to basics. (Free tier covers essentials)
+            </a>
+            <a href="https://vimgolf.com/" target="_blank" class="resource-link">
+                ⛳ Vim Golf — Coding puzzles solved with minimal keystrokes. Race against others' solutions. Highly addictive.
+            </a>
+            <a href="https://speedcoder.net/" target="_blank" class="resource-link">
+                ⚡ Speedcoder — Race-style typing with Vim commands. Real-time multiplayer. Gamifies speed.
+            </a>
+
+            <h3>Learning Paths</h3>
+            <div class="resource-link">
+                📖 Vim Tutor — Built-in. Run <span class="key">vimtutor</span> in terminal. 30 min, official Vim tutorial. Best starting point.
+            </div>
+            <a href="https://wiki.vim.org/" target="_blank" class="resource-link">
+                📚 Vim Wiki — Community docs. Dry but comprehensive. Good for reference after basics.
+            </a>
+            <a href="https://jovian.com/learn-vim" target="_blank" class="resource-link">
+                🎥 Learn Vim Progressively — Structured written guide. Top-rated for self-paced learning.
+            </a>
+
+            <h3>Recommended Practice Schedule</h3>
+            <div class="catppuccin-card p-4 rounded">
+                <ol class="list-decimal list-inside space-y-2">
+                    <li><strong>This week (Day 1–3):</strong> <span class="key">vimtutor</span> (30 min) + VimAdventures 1 hr. Goal: hjkl + i/a/Esc + dw/yy/p reflexive.</li>
+                    <li><strong>Week 1–2:</strong> Edit real code in Neovim. Use cheatsheet open beside. Focus on w/b/e, f/, ci(, daw chains.</li>
+                    <li><strong>Week 2–4:</strong> 10 min daily Vim Golf. Practice text objects + counts. Motions become automatic.</li>
+                    <li><strong>Month 1+:</strong> No cheatsheet. Vim motions are flow. Move to advanced chains (6dj, cip, >%). Explore plugins (which-key keeps learning fun).</li>
+                </ol>
+                <p class="text-sm mt-3 text-gray-400"><strong>Key insight:</strong> 20 hours of deliberate practice (games + real editing) → 10x faster than mouse-based editors. The learning curve is front-loaded; the payoff lasts forever.</p>
+            </div>
+
+            <h3>Pro Tips for Learning</h3>
+            <div class="motion-box">
+                <div>🎯 <span class="guide"><strong>Use relative line numbers.</strong> They make counting distances natural. See <span class="key">:set rnu</span> (already on in LazyVim).</span></div>
+                <div>🎯 <span class="guide"><strong>Disable arrow keys</strong> while learning (forces hjkl). After 1 week, re-enable if you want — by then hjkl is reflexive.</span></div>
+                <div>🎯 <span class="guide"><strong>Practice the dot (.) operator daily.</strong> Edit once, repeat with <span class="key">.</span> = muscle memory chaining.</span></div>
+                <div>🎯 <span class="guide"><strong>Keep which-key menu visible.</strong> Explore commands by hitting Space. Curiosity-driven discovery is faster than reading docs.</span></div>
+            </div>
+
+            <h3>When You Get Stuck</h3>
+            <div class="catppuccin-card p-4 rounded">
+                <p><strong>Q: I know the motion but forgot the key combination.</strong></p>
+                <p class="text-sm mt-2">A: Hit <span class="key">Space</span> and wait for which-key. Scroll visually to find what you're looking for.</p>
+
+                <p class="mt-4"><strong>Q: I want to do X, what's the Vim way?</strong></p>
+                <p class="text-sm mt-2">A: In real editing, use Vim Golf to see how experts solve it. Or use <span class="key">Space /</span> to search the docs.</p>
+
+                <p class="mt-4"><strong>Q: Am I doing this inefficiently?</strong></p>
+                <p class="text-sm mt-2">A: After month 1, check your most-used motions. If you're reaching for the mouse often, that's your next target to practice.</p>
+            </div>
+        </div>
+
+        <!-- Quick Reference Card (All Tabs) -->
+        <div class="mt-8 border-t border-gray-700 pt-6">
+            <h2>📋 Quick Reference Card</h2>
+            <div class="quick-ref">
+                <div>
+                    <h3>Modes</h3>
+                    <div class="motion-box p-2"><span class="key">i</span> insert | <span class="key">a</span> append | <span class="key">v</span> visual</div>
+                </div>
+                <div>
+                    <h3>Move</h3>
+                    <div class="motion-box p-2"><span class="key">hjkl</span> arrows | <span class="key">wbe</span> words | <span class="key">0$</span> line ends | <span class="key">gg</span>/<span class="key">G</span> file ends</div>
+                </div>
+                <div>
+                    <h3>Edit</h3>
+                    <div class="motion-box p-2"><span class="key">dyw</span> delete/yank word | <span class="key">dd</span>/<span class="key">yy</span> line | <span class="key">p</span> paste</div>
+                </div>
+                <div>
+                    <h3>Text Objects</h3>
+                    <div class="motion-box p-2"><span class="key">ci(/di(/ca(/da(</span> parens | <span class="key">ciw</span> word | <span class="key">cip</span> paragraph</div>
+                </div>
+                <div>
+                    <h3>Find</h3>
+                    <div class="motion-box p-2"><span class="key">f</span>x find | <span class="key">;</span>/<span class="key">,</span> repeat | <span class="key">/</span> search</div>
+                </div>
+                <div>
+                    <h3>Neovim</h3>
+                    <div class="motion-box p-2"><span class="key">Space</span> leader | <span class="key">Ctrl-hjkl</span> split nav | <span class="key">gd</span>/<span class="key">gr</span> LSP</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="mt-8 text-center text-gray-500 text-sm">
+            <p>Customize this cheatsheet: open in a text editor and modify. Print or bookmark to keep handy while learning.</p>
+            <p class="mt-2">Created for your Neovim + LazyVim + cmux terminal workflow. Theme: Catppuccin Mocha.</p>
+        </div>
+    </div>
+
+    <script>
+        function showTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tabs-container').forEach(el => {
+                el.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-btn').forEach(el => {
+                el.classList.remove('active');
+            });
+
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            document.getElementById('btn-' + tabName).classList.add('active');
+        }
+    </script>
+</body>
+</html>

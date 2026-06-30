@@ -1,0 +1,48 @@
+# ~/.config/ghostty/config
+# Terminal rendering for every cmux terminal surface.
+# cmux reads this file; run `cmux reload-config` after edits (no restart).
+# Browse alternatives: `ghostty +list-themes`  /  full reference: `ghostty +show-config --default --docs | less`
+
+# ----- Theme -----
+# Swap for any of: "Catppuccin Macchiato", "TokyoNight Night", "Gruvbox Material Dark",
+# "Kanagawa Wave", "Nord", "Carbonfox", "Dracula+". Confirmed installed on this machine.
+theme = Catppuccin Mocha
+
+# ----- Font -----
+# JetBrainsMono Nerd Font: same JetBrains Mono + ligatures, PLUS the icon glyphs
+# Neovim/LazyVim (file-tree, statusline, git signs) needs. Installed via brew cask.
+font-family = JetBrainsMono Nerd Font
+font-size = 14
+font-thicken = true
+# Ligatures on by default for JetBrains Mono; disable the slashed-zero/arrows feature set if you dislike them:
+# font-feature = -calt
+
+# ----- Background: subtle glass (readable, not heavy) -----
+background-opacity = 0.96
+background-blur-radius = 24
+
+# ----- Cursor -----
+cursor-style = block
+cursor-style-blink = false
+shell-integration-features = cursor,sudo,title
+
+# ----- Scrollback: large, for long agent sessions -----
+scrollback-limit = 100000
+
+# ----- Mouse scroll speed (was too fast) -----
+# Lower = slower. precision = trackpad (default 1), discrete = mouse wheel (default 3).
+# Tune to taste; clamped to [0.01, 10000]. Raise these if it now feels too slow.
+mouse-scroll-multiplier = precision:0.5,discrete:1
+
+# ----- Spacing / chrome -----
+window-padding-x = 10
+window-padding-y = 8
+window-padding-balance = true
+mouse-hide-while-typing = true
+copy-on-select = clipboard
+clipboard-trim-trailing-spaces = true
+
+# ----- Performance / sanity for heavy multi-agent output -----
+window-vsync = true
+# Confirm before pasting multi-line blobs (prevents accidental command floods from agents):
+clipboard-paste-protection = true

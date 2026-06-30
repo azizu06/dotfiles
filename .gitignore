@@ -1,0 +1,5 @@
+.DS_Store
+*.log
+# cmux keeps timestamped backups of its config; we only track the live cmux.json
+cmux/*.bak*
+cmux/*.bak-*
