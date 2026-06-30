@@ -6,3 +6,8 @@
 -- your fingers prefer); remove either line if it ever fires mid-word by accident.
 vim.keymap.set("i", "jj", "<Esc>", { desc = "Exit insert mode" })
 vim.keymap.set("i", "jk", "<Esc>", { desc = "Exit insert mode" })
+
+-- Ergonomics (Mac): redo without the awkward Ctrl-r pinky reach.
+-- `u` = undo (default), now `U` (Shift+u) = redo — a clean, symmetric pair.
+-- (U's default job, "undo all changes on one line", is rarely used.)
+vim.keymap.set("n", "U", "<C-r>", { desc = "Redo" })

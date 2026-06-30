@@ -58,7 +58,7 @@ require("lazy").setup({
         -- "netrwPlugin",
         "tarPlugin",
         "tohtml",
-        "tutor",
+        -- "tutor",  -- re-enabled so `:Tutor` (the built-in beginner lesson) works
         "zipPlugin",
       },
     },
