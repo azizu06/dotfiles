@@ -11,3 +11,10 @@ vim.keymap.set("i", "jk", "<Esc>", { desc = "Exit insert mode" })
 -- `u` = undo (default), now `U` (Shift+u) = redo — a clean, symmetric pair.
 -- (U's default job, "undo all changes on one line", is rarely used.)
 vim.keymap.set("n", "U", "<C-r>", { desc = "Redo" })
+
+-- Swap 0 and ^: the easy single-key `0` jumps to the first real character (what you
+-- usually want in indented code); the harder `^` now goes to the true column 0.
+-- Applied to normal/visual/operator modes so d0, v0, etc. stay consistent. Safe with
+-- counts — Vim only treats `0` as a motion when it is the first key (10j still works).
+vim.keymap.set({ "n", "x", "o" }, "0", "^", { desc = "First non-blank char" })
+vim.keymap.set({ "n", "x", "o" }, "^", "0", { desc = "Start of line (column 0)" })
