@@ -5,4 +5,6 @@ set -euo pipefail
 here="$(cd "$(dirname "$0")" && pwd)"
 cp ~/.config/cmux/cmux.json "$here/cmux/cmux.json"
 echo "✓ cmux.json snapshot refreshed."
+cp ~/.config/karabiner/karabiner.json "$here/karabiner/karabiner.json" 2>/dev/null \
+  && echo "✓ karabiner.json snapshot refreshed."
 echo "  Next: git add -A && git commit -m 'update' && git push"

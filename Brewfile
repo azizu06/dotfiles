@@ -12,3 +12,4 @@ brew "lazygit"           # git TUI used from inside nvim
 brew "tree-sitter-cli"   # syntax parsers for nvim
 
 cask "font-jetbrains-mono-nerd-font"  # font + icon glyphs LazyVim needs
+cask "karabiner-elements"             # hold-Space -> Control remap (needs sudo + permissions on first run)

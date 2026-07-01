@@ -9,7 +9,7 @@ info() { printf '   %s\n' "$*"; }
 ok()   { printf '\xe2\x9c\x93 %s\n' "$*"; }
 
 # 1. Make sure every target directory exists (fresh machines lack these).
-mkdir -p "$HOME/.config" "$HOME/.config/cmux" "$HOME/Library/LaunchAgents"
+mkdir -p "$HOME/.config" "$HOME/.config/cmux" "$HOME/.config/karabiner" "$HOME/Library/LaunchAgents"
 
 # symlink $1 -> $2, backing up anything real already sitting at $2.
 link() {
@@ -34,6 +34,11 @@ link "$here/ghostty" "$HOME/.config/ghostty"
 # 3. cmux rewrites its own config, so it is copied, not symlinked.
 cp "$here/cmux/cmux.json" "$HOME/.config/cmux/cmux.json"
 ok "cmux.json copied -> ~/.config/cmux/cmux.json"
+
+# 3b. Karabiner (hold Space -> Control). It rewrites its own JSON via the UI, so
+#     copied, not symlinked. Needs Input Monitoring + Accessibility on first launch.
+cp "$here/karabiner/karabiner.json" "$HOME/.config/karabiner/karabiner.json"
+ok "karabiner.json copied -> ~/.config/karabiner/ (grant permissions on first launch)"
 
 # 4. macOS modifier remap: Caps Lock -> Control. Install, (re)load, apply now.
 plist="com.aziz.capslock-to-control.plist"
