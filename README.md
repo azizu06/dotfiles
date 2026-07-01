@@ -7,7 +7,7 @@ My terminal-based dev environment, cloud-backed. Themed **Catppuccin Mocha** thr
 | `nvim/` | Neovim + [LazyVim](https://lazyvim.org) config | ✅ symlinked → `~/.config/nvim` |
 | `ghostty/` | [Ghostty](https://ghostty.org) terminal (font/theme cmux renders through) | ✅ symlinked → `~/.config/ghostty` |
 | `cmux/` | [cmux](https://github.com/manaflow-ai/cmux) terminal/agent workspace | 📸 snapshot (see below) |
-| `macos/` | LaunchAgent: Caps Lock **and** left Option → Control (thumb-friendly Ctrl) | 🔧 installed by `install.sh` |
+| `macos/` | LaunchAgent: Caps Lock → Control | 🔧 installed by `install.sh` |
 
 ## Reproduce on a new machine
 
@@ -25,11 +25,13 @@ overwrite to `<path>.bak-<timestamp>` first, so it can never clobber existing co
 > - **cmux** itself is a standalone app (manaflow-ai), *not* on Homebrew — install it
 >   separately. It **bundles Ghostty** (so there's no separate ghostty install); this
 >   repo only carries the `ghostty/` + `cmux/` config it reads.
-> - **Modifier remap** (`macos/`): Caps Lock and the **left Option** key both send
->   Control — thumb-friendly Ctrl for terminal + Vim, with Command left fully intact.
->   `install.sh` loads it; macOS may drop `hidutil` maps on wake/keyboard-hotplug, in
->   which case re-run `./install.sh` (or, for a never-drift version, set System
->   Settings → Keyboard → Modifier Keys → Option → Control — affects both Option keys).
+> - **Modifier remap** (`macos/`): Caps Lock → Control (a standard, harmless swap).
+>   `install.sh` loads it; macOS can drop `hidutil` maps on wake/keyboard-hotplug, so
+>   re-run `./install.sh` if it reverts (never-drift version: System Settings →
+>   Keyboard → Modifier Keys → Caps Lock → Control).
+>   NOTE: do NOT remap Option/Command to Control here — a 1:1 `hidutil` swap consumes
+>   the key globally and breaks Option+Delete, Option+arrows, etc. Thumb-Control needs
+>   Karabiner-Elements (tap/hold), not `hidutil`.
 
 ## Backing up changes
 

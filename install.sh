@@ -35,13 +35,12 @@ link "$here/ghostty" "$HOME/.config/ghostty"
 cp "$here/cmux/cmux.json" "$HOME/.config/cmux/cmux.json"
 ok "cmux.json copied -> ~/.config/cmux/cmux.json"
 
-# 4. macOS modifier remap: Caps Lock AND left Option both send Control
-#    (thumb-friendly Ctrl for terminal/Vim). Install, (re)load, apply now.
+# 4. macOS modifier remap: Caps Lock -> Control. Install, (re)load, apply now.
 plist="com.aziz.capslock-to-control.plist"
 cp "$here/macos/$plist" "$HOME/Library/LaunchAgents/$plist"
 launchctl unload "$HOME/Library/LaunchAgents/$plist" 2>/dev/null || true
 launchctl load   "$HOME/Library/LaunchAgents/$plist"
-ok "modifier remap installed + loaded (Caps & left Option -> Control)"
+ok "modifier remap installed + loaded (Caps Lock -> Control)"
 
 cat <<'EOF'
 
