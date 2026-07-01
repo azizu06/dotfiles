@@ -35,7 +35,7 @@ link "$here/ghostty" "$HOME/.config/ghostty"
 cp "$here/cmux/cmux.json" "$HOME/.config/cmux/cmux.json"
 ok "cmux.json copied -> ~/.config/cmux/cmux.json"
 
-# 3b. Karabiner (hold Space -> Control). It rewrites its own JSON via the UI, so
+# 3b. Karabiner (Right Command -> Control). It rewrites its own JSON via the UI, so
 #     copied, not symlinked. Needs Input Monitoring + Accessibility on first launch.
 cp "$here/karabiner/karabiner.json" "$HOME/.config/karabiner/karabiner.json"
 ok "karabiner.json copied -> ~/.config/karabiner/ (grant permissions on first launch)"

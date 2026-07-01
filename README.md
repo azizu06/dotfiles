@@ -8,7 +8,7 @@ My terminal-based dev environment, cloud-backed. Themed **Catppuccin Mocha** thr
 | `ghostty/` | [Ghostty](https://ghostty.org) terminal (font/theme cmux renders through) | ✅ symlinked → `~/.config/ghostty` |
 | `cmux/` | [cmux](https://github.com/manaflow-ai/cmux) terminal/agent workspace | 📸 snapshot (see below) |
 | `macos/` | LaunchAgent: Caps Lock → Control | 🔧 installed by `install.sh` |
-| `karabiner/` | [Karabiner](https://karabiner-elements.pqrs.org): **hold Space = Control**, tap = Space (off in Figma/Blender) | 📸 snapshot; copied by `install.sh` |
+| `karabiner/` | [Karabiner](https://karabiner-elements.pqrs.org): **Right Command → Control** (dedicated right-thumb Ctrl) | 📸 snapshot; copied by `install.sh` |
 
 ## Reproduce on a new machine
 
@@ -32,13 +32,14 @@ overwrite to `<path>.bak-<timestamp>` first, so it can never clobber existing co
 >   Keyboard → Modifier Keys → Caps Lock → Control).
 >   NOTE: do NOT remap Option/Command to Control here — a 1:1 `hidutil` swap consumes
 >   the key globally and breaks Option+Delete, Option+arrows, etc. Thumb-Control is
->   instead done in `karabiner/` (tap/hold), which leaves Option + Command intact.
-> - **Karabiner** (`karabiner/`): hold **Space** = Control, tap = Space. Only the bare
->   spacebar is touched, and it auto-disables in Figma/Blender (which use hold-Space to
->   pan). After `brew bundle` installs it, launch Karabiner-Elements once and grant
->   **Input Monitoring** + **Accessibility** (System Settings → Privacy & Security) and
->   approve its driver/system extension — a one-time manual grant macOS requires.
->   `install.sh` places the config; run `./sync.sh` before committing UI-side changes.
+>   instead done in `karabiner/` (Right Command → Control), which leaves Option, Space,
+>   and left Command intact.
+> - **Karabiner** (`karabiner/`): remaps **Right Command → Control** — a dedicated
+>   right-thumb Ctrl (left Command, Option, and Space are all untouched). After
+>   `brew bundle` installs it, launch Karabiner-Elements once and grant **Input
+>   Monitoring** + **Accessibility** (System Settings → Privacy & Security) and approve
+>   its driver/system extension — a one-time manual grant macOS requires. `install.sh`
+>   places the config; run `./sync.sh` before committing UI-side changes.
 
 ## Backing up changes
 
